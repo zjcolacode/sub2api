@@ -111,6 +111,7 @@ backend/data/
 backend/config.yaml
 deploy/config.yaml
 backend/.installed
+db配置文件
 
 # ===================
 # 其他

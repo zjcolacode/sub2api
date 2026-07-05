@@ -1,0 +1,55 @@
+# 数据库机：自建 PostgreSQL 18 + Redis 8
+# 仅通过安全组限定应用机内网 IP 访问，不暴露公网
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: sub2api-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_USER:-sub2api}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:?PG_PASSWORD is required}
+      POSTGRES_DB: ${PG_DB:-sub2api}
+      TZ: Asia/Shanghai
+    # 2C4G 机型的性能参数（shared_buffers 1GB，预留 OS/Redis）
+    command: >
+      postgres
+      -c max_connections=100
+      -c shared_buffers=1GB
+      -c effective_cache_size=2GB
+      -c maintenance_work_mem=128MB
+      -c work_mem=8MB
+      -c log_min_duration_statement=1000
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "0.0.0.0:5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${PG_USER:-sub2api}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:8-alpine
+    container_name: sub2api-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      --appendonly yes
+      --save 60 1
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    ports:
+      - "0.0.0.0:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_data:
+  redis_data:
