@@ -1129,7 +1129,10 @@ export default {
       perRequestPrice: '每次请求',
       intervals: '阶梯定价',
       unitPerMillion: '/ 1M token',
-      unitPerRequest: '/ 次'
+      unitPerRequest: '/ 次',
+      modelName: '模型',
+      viewPricing: '价格',
+      hidePricing: '收起'
     }
   },
 

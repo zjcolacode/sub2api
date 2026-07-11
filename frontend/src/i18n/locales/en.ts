@@ -1125,7 +1125,10 @@ export default {
       perRequestPrice: 'Per Request',
       intervals: 'Tiered Pricing',
       unitPerMillion: '/ 1M tokens',
-      unitPerRequest: '/ request'
+      unitPerRequest: '/ request',
+      modelName: 'Model',
+      viewPricing: 'Pricing',
+      hidePricing: 'Hide'
     }
   },
 

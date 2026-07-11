@@ -1,5 +1,5 @@
 <template>
-  <div class="card overflow-hidden">
+  <div class="table-wrapper">
     <table class="w-full table-fixed border-collapse text-sm">
       <thead>
         <tr class="border-b border-gray-100 bg-gray-50/50 text-xs font-medium uppercase tracking-wide text-gray-500 dark:border-dark-700 dark:bg-dark-800/50 dark:text-gray-400">
@@ -33,16 +33,18 @@
         :key="`${channel.name}-${chIdx}`"
         class="border-b-2 border-gray-200 last:border-b-0 dark:border-dark-600"
       >
-        <tr
+        <template
           v-for="(section, secIdx) in channel.platforms"
           :key="`${channel.name}-${section.platform}`"
-          class="transition-colors hover:bg-gray-50/40 dark:hover:bg-dark-800/40"
-          :class="{ 'border-t border-gray-100/70 dark:border-dark-700/50': secIdx > 0 }"
         >
-          <!-- 渠道名：只在第一行渲染并用 rowspan 纵向合并 -->
+        <tr
+          class="transition-colors hover:bg-gray-50/40 dark:hover:bg-dark-800/40"
+          :class="{ 'border-t border-gray-100/70 dark:border-dark-700/50': Number(secIdx) > 0 }"
+        >
+          <!-- 渠道名：只在第一行渲染并用 rowspan 纵向合并（含展开的价格行） -->
           <td
             v-if="secIdx === 0"
-            :rowspan="channel.platforms.length"
+            :rowspan="channelRowSpan(channel, chIdx)"
             class="px-4 py-3 text-center align-middle font-medium text-gray-900 dark:text-white"
           >
             {{ channel.name }}
@@ -51,7 +53,7 @@
           <!-- 描述：独立一列，同样用 rowspan 纵向合并 -->
           <td
             v-if="secIdx === 0"
-            :rowspan="channel.platforms.length"
+            :rowspan="channelRowSpan(channel, chIdx)"
             class="px-4 py-3 align-middle text-xs text-gray-500 dark:text-gray-400"
           >
             <template v-if="channel.description">{{ channel.description }}</template>
@@ -124,33 +126,67 @@
 
           <!-- 支持模型 -->
           <td class="align-top px-4 py-3">
-            <div class="flex flex-wrap gap-1">
-              <SupportedModelChip
-                v-for="m in section.supported_models"
-                :key="`${section.platform}-${m.name}`"
-                :model="m"
-                :pricing-key-prefix="pricingKeyPrefix"
-                :no-pricing-label="noPricingLabel"
-                :show-platform="false"
-                :platform-hint="section.platform"
-              />
-              <span v-if="section.supported_models.length === 0" class="text-xs text-gray-400">
-                {{ noModelsLabel }}
-              </span>
+            <div class="flex items-start gap-2">
+              <button
+                v-if="section.supported_models.length > 0"
+                type="button"
+                class="mt-0.5 inline-flex flex-shrink-0 items-center gap-1 rounded-md border border-gray-200 px-1.5 py-0.5 text-[11px] font-medium text-gray-500 transition-colors hover:border-primary-300 hover:text-primary-600 dark:border-dark-600 dark:text-gray-400 dark:hover:border-primary-500 dark:hover:text-primary-400"
+                :title="isExpanded(chIdx, secIdx) ? t('availableChannels.pricing.hidePricing') : t('availableChannels.pricing.viewPricing')"
+                @click="toggle(chIdx, secIdx)"
+              >
+                <Icon
+                  :name="isExpanded(chIdx, secIdx) ? 'chevronUp' : 'chevronDown'"
+                  size="xs"
+                  class="h-3 w-3"
+                />
+                {{ isExpanded(chIdx, secIdx) ? t('availableChannels.pricing.hidePricing') : t('availableChannels.pricing.viewPricing') }}
+              </button>
+              <div class="flex flex-wrap gap-1">
+                <SupportedModelChip
+                  v-for="m in section.supported_models"
+                  :key="`${section.platform}-${m.name}`"
+                  :model="m"
+                  :pricing-key-prefix="pricingKeyPrefix"
+                  :no-pricing-label="noPricingLabel"
+                  :show-platform="false"
+                  :platform-hint="section.platform"
+                />
+                <span v-if="section.supported_models.length === 0" class="text-xs text-gray-400">
+                  {{ noModelsLabel }}
+                </span>
+              </div>
             </div>
           </td>
         </tr>
+
+        <!-- 展开的价格表行：仅渲染平台/分组/支持模型三列（渠道名、描述由 rowspan 覆盖） -->
+        <tr
+          v-if="isExpanded(chIdx, secIdx)"
+          class="bg-gray-50/60 dark:bg-dark-800/30"
+        >
+          <td colspan="3" class="px-4 pb-4 pt-0 align-top">
+            <ModelPricingTable
+              :models="section.supported_models"
+              :pricing-key-prefix="pricingKeyPrefix"
+              :no-pricing-label="noPricingLabel"
+              :platform-hint="section.platform"
+            />
+          </td>
+        </tr>
+        </template>
       </tbody>
     </table>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Icon from '@/components/icons/Icon.vue'
 import PlatformIcon from '@/components/common/PlatformIcon.vue'
 import GroupBadge from '@/components/common/GroupBadge.vue'
 import SupportedModelChip from './SupportedModelChip.vue'
+import ModelPricingTable from './ModelPricingTable.vue'
 import type { UserAvailableChannel, UserAvailableGroup, UserChannelPlatformSection } from '@/api/channels'
 import type { GroupPlatform, SubscriptionType } from '@/types'
 import { platformBadgeClass } from '@/utils/platformColors'
@@ -186,4 +222,40 @@ function exclusiveGroups(section: UserChannelPlatformSection): UserAvailableGrou
 function publicGroups(section: UserChannelPlatformSection): UserAvailableGroup[] {
   return section.groups.filter((g) => !g.is_exclusive)
 }
+
+// ── 价格表展开状态 ──────────────────────────────────────────────
+// 以 `${chIdx}-${secIdx}` 为键记录哪些平台分区展开了价格表。
+// 每个渠道可有多个平台分区，各自独立展开/折叠。
+const expanded = ref<Set<string>>(new Set())
+
+function sectionKey(chIdx: number, secIdx: number): string {
+  return `${chIdx}-${secIdx}`
+}
+
+function isExpanded(chIdx: number, secIdx: number): boolean {
+  return expanded.value.has(sectionKey(chIdx, secIdx))
+}
+
+function toggle(chIdx: number, secIdx: number): void {
+  const key = sectionKey(chIdx, secIdx)
+  const next = new Set(expanded.value)
+  if (next.has(key)) {
+    next.delete(key)
+  } else {
+    next.add(key)
+  }
+  expanded.value = next
+}
+
+/**
+ * 渠道名/描述列的 rowspan：等于该渠道全部渲染行数。
+ * 每个平台分区占 1 行，展开价格表时再 +1 行，确保纵向合并覆盖价格行。
+ */
+function channelRowSpan(channel: UserAvailableChannel, chIdx: number): number {
+  return channel.platforms.reduce(
+    (sum, _section, secIdx) => sum + (isExpanded(chIdx, secIdx) ? 2 : 1),
+    0
+  )
+}
+
 </script>
