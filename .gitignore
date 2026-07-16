@@ -141,3 +141,6 @@ docs/*
 frontend/coverage/
 aicodex
 output/
+
+# 本地静态页面（不纳入版本控制）
+cda2api-home.html

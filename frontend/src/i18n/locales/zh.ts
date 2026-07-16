@@ -1,109 +1,141 @@
 export default {
   // Home Page
   home: {
-    viewOnGithub: '在 GitHub 上查看',
     viewDocs: '查看文档',
     docs: '文档',
     switchToLight: '切换到浅色模式',
     switchToDark: '切换到深色模式',
     dashboard: '控制台',
     login: '登录',
-    getStarted: '立即开始',
     goToDashboard: '进入控制台',
-    // 新增：面向用户的价值主张
-    heroSubtitle: '一个密钥，畅用多个 AI 模型',
-    heroDescription: '无需管理多个订阅账号，一站式接入 Claude、GPT、Gemini 等主流 AI 服务',
-    tags: {
-      subscriptionToApi: '订阅转 API',
-      stickySession: '会话保持',
-      realtimeBilling: '按量计费'
+    // 顶部促销横幅
+    promo: {
+      tag: '🔥 重磅预告',
+      before: '巅峰旗舰',
+      highlight: 'Claude Fable 5',
+      after: '即将登陆 {name} —— 更强推理 · 更懂代码 · 重塑 AI 编程体验！',
+      cta: '抢先注册'
     },
-    // 用户痛点区块
-    painPoints: {
-      title: '你是否也遇到这些问题？',
+    // Hero 主视觉
+    hero: {
+      badge: '安全稳定的 AI 编程 API 接入服务',
+      titlePrefix: '一个接口，',
+      titleHighlight: '连接所有 AI 模型',
+      desc: '面向开发者和团队的 AI API 聚合网关。统一接入 Claude、GPT 等主流模型，提供稳定的 API 转发、在线充值和用量统计。',
+      register: '立即注册',
+      loginConsole: '登录控制台'
+    },
+    // 数据统计条
+    stats: {
+      node: { value: 'HongKong', label: '亚洲低延迟节点' },
+      encryption: { value: 'HTTPS', label: '全链路加密传输' },
+      uptime: { value: '99.9%', label: '服务可用性保障' },
+      support: { value: '24h', label: '在线工单响应' }
+    },
+    // 安全与隐私
+    security: {
+      title: '安全与隐私',
+      subtitle: '您的数据安全是我们的首要承诺',
       items: {
-        expensive: {
-          title: '订阅费用高',
-          desc: '每个 AI 服务都要单独订阅，每月支出越来越多'
+        noSell: {
+          title: '数据不售卖',
+          desc: '您的请求数据不会被出售或用于任何商业用途，我们承诺绝不利用用户数据进行广告画像。'
         },
-        complex: {
-          title: '多账号难管理',
-          desc: '不同平台的账号、密钥分散各处，管理起来很麻烦'
+        minimalLog: {
+          title: '最小日志原则',
+          desc: '仅保留必要的计费、限流和排障日志，不记录请求的具体内容，保护您的隐私。'
         },
-        unstable: {
-          title: '服务不稳定',
-          desc: '单一账号容易触发限制，影响正常使用'
-        },
-        noControl: {
-          title: '用量无法控制',
-          desc: '不知道钱花在哪了，也无法限制团队成员的使用'
+        keyControl: {
+          title: '密钥独立管理',
+          desc: 'API Key 支持单独创建、轮换和停用，精细化控制每个应用的访问权限。'
         }
       }
     },
-    // 解决方案区块
-    solutions: {
-      title: '我们帮你解决',
-      subtitle: '简单三步，开始省心使用 AI'
-    },
-    features: {
-      unifiedGateway: '一键接入',
-      unifiedGatewayDesc: '获取一个 API 密钥，即可调用所有已接入的 AI 模型，无需分别申请。',
-      multiAccount: '稳定可靠',
-      multiAccountDesc: '智能调度多个上游账号，自动切换和负载均衡，告别频繁报错。',
-      balanceQuota: '用多少付多少',
-      balanceQuotaDesc: '按实际使用量计费，支持设置配额上限，团队用量一目了然。'
-    },
-    // 优势对比
-    comparison: {
-      title: '为什么选择我们？',
-      headers: {
-        feature: '对比项',
-        official: '官方订阅',
-        us: '本平台'
+    // 透明充值 · 线路计价
+    models: {
+      title: '透明充值，线路清楚。',
+      subtitle: '统一接入 Claude 与 Codex，价格与线路全程透明可查',
+      ratioLabel: '线路倍率',
+      supportedModels: '支持模型',
+      recharge: '立即充值',
+      banner: {
+        tag: '限时活动',
+        title: '充值 ￥100，实际到账 $100 额度',
+        desc: '先充值再使用，当前充值 ￥100 实际到账 $100 额度；Claude Max 与 Codex(Team) 分开计价，模型价格已按 OpenModel 公示价 9 折同步，线路倍率和可用模型以站内“可用渠道”页面实时显示为准。'
       },
-      items: {
-        pricing: {
-          feature: '付费方式',
-          official: '固定月费，用不完也付',
-          us: '按量付费，用多少付多少'
+      plans: {
+        claude: {
+          badge: 'Claude',
+          name: 'Claude Max',
+          ratio: '1 : 1.6',
+          desc: '当前充值按 6+ 倍到账，支付 ￥100 可得 $100 额度。模型价格已按 OpenModel 公示价 9 折同步，官方 Max20x 账号，适合 Claude Code 与长上下文编程任务。',
+          cli: '支持 Claude Code CLI'
         },
-        models: {
-          feature: '模型选择',
-          official: '单一服务商',
-          us: '多模型随意切换'
-        },
-        management: {
-          feature: '账号管理',
-          official: '每个服务单独管理',
-          us: '统一密钥，一站管理'
-        },
-        stability: {
-          feature: '服务稳定性',
-          official: '单账号易触发限制',
-          us: '多账号池，自动切换'
-        },
-        control: {
-          feature: '用量控制',
-          official: '无法限制',
-          us: '可设配额、查明细'
+        codex: {
+          badge: 'Codex',
+          name: 'Codex(Team)',
+          ratio: '1 : 0.6',
+          desc: '当前充值按 6+ 倍到账，支付 ￥100 可得 $100 额度。模型价格已按 OpenModel 公示价 9 折同步，ChatGPT Team OAuth 线路，支持 Codex CLI、OpenAI 兼容开发工具和图片生成。',
+          cli: 'Codex CLI'
         }
       }
     },
-    providers: {
-      title: '已支持的 AI 模型',
-      description: '一个 API，多种选择',
-      supported: '已支持',
-      soon: '即将推出',
-      claude: 'Claude',
-      gemini: 'Gemini',
-      antigravity: 'Antigravity',
-      more: '更多'
+    // 使用步骤
+    steps: {
+      title: '三步开始使用',
+      subtitle: '简单配置，即刻接入',
+      items: {
+        register: { title: '注册账号', desc: '注册并验证邮箱，新用户赠送体验额度' },
+        createKey: { title: '创建 API Key', desc: '在控制台创建专属 API Key，支持多个独立管理' },
+        integrate: { title: '配置工具接入', desc: '将 Base URL 和 Key 填入开发工具，开始使用' }
+      }
+    },
+    // 常见问题
+    faq: {
+      title: '常见问题',
+      subtitle: '快速了解 {name} 的使用和安全策略',
+      items: {
+        tools: {
+          q: '支持哪些开发工具？',
+          a: '支持所有兼容 OpenAI API 格式的工具，包括 Claude Code、Cursor、Cline、Roo Code、ChatGPT 客户端等。'
+        },
+        security: {
+          q: '数据传输是否安全？',
+          a: '全链路 HTTPS 加密传输，服务器部署在新加坡，面向亚洲访问优化。我们不会记录您请求的具体内容。'
+        },
+        payment: {
+          q: '支持哪些支付方式？',
+          a: '支持支付宝、微信支付和国际信用卡，充值即时到账。'
+        },
+        support: {
+          q: '遇到问题如何获取帮助？',
+          a: '提供 24 小时在线工单支持，通常在 1 小时内响应。也可通过社群获取快速帮助。'
+        }
+      }
     },
     // CTA 区块
     cta: {
-      title: '准备好开始了吗？',
-      description: '注册即可获得免费试用额度，体验一站式 AI 服务',
-      button: '免费注册'
+      title: '现在就开始使用 {name}',
+      subtitle: '稳定接入主流 AI 模型，让开发更高效',
+      register: '创建免费账号',
+      login: '已有账号？登录'
+    },
+    // 服务声明与合规提示
+    disclaimer: {
+      title: '服务声明与合规提示',
+      location: '香港（HongKong）',
+      crossBorder: '跨境数据传输',
+      p1a: '本平台服务器部署于',
+      p1b: '，由境外主体运营。使用本服务时，您的请求数据将经由境外服务器处理和传输，可能涉及',
+      p1c: '。',
+      items: {
+        scope: '本服务面向具备合规判断能力的开发者和技术团队，不面向中国大陆普通消费者提供直接服务',
+        compliance: '用户应自行确认使用本服务是否符合所在地区的法律法规要求，包括但不限于数据出境、网络安全、个人信息保护等相关规定',
+        prohibited: '请勿通过本服务传输涉及国家秘密、敏感个人信息或受管控的重要数据',
+        liability: '本平台不承担因用户违反当地法律法规而产生的任何法律责任'
+      },
+      p2: '继续使用本服务即表示您已知悉上述信息，并确认自愿承担相应风险与责任。如有合规顾虑，建议咨询专业法律人士后再决定是否使用。',
+      copyright: '本声明最终解释权归平台运营方所有'
     },
     footer: {
       allRightsReserved: '保留所有权利。'
@@ -6232,7 +6264,12 @@ export default {
         homeContentIframeWarning:
           '⚠️ iframe 模式提示：部分网站设置了 X-Frame-Options 或 CSP 安全策略，禁止被嵌入到 iframe 中。如果页面显示空白或报错，请确认目标网站允许被嵌入，或考虑使用 HTML 模式自行构建页面内容。',
         hideCcsImportButton: '隐藏 CCS 导入按钮',
-        hideCcsImportButtonHint: '启用后将在 API Keys 页面隐藏"导入 CCS"按钮'
+        hideCcsImportButtonHint: '启用后将在 API Keys 页面隐藏"导入 CCS"按钮',
+        homePromoEnabled: '首页顶部横幅',
+        homePromoEnabledHint: '控制默认首页顶部的促销横幅是否显示',
+        homePromoText: '首页横幅文案',
+        homePromoTextPlaceholder: '留空则使用系统默认文案',
+        homePromoTextHint: '自定义默认首页顶部横幅的文案；留空时使用内置的默认文案。仅在未设置"首页内容"时生效。'
       },
       purchase: {
         title: '充值/订阅页面',
@@ -7380,7 +7417,7 @@ export default {
     amountTooLow: '最低金额为 {min}',
     amountTooHigh: '最高金额为 {max}',
     amountNoMethod: '该金额没有可用的支付方式',
-    rechargeRatePreview: '当前倍率：1 CNY = {usd} USD',
+    rechargeRatePreview: '当前活动倍率：支付 1 元，到账 {usd} 美元额度',
     refundReason: '退款原因',
     refundReasonPlaceholder: '请描述您的退款原因',
     stripeLoadFailed: '支付组件加载失败，请刷新页面重试',

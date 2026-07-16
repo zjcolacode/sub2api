@@ -1,109 +1,141 @@
 export default {
   // Home Page
   home: {
-    viewOnGithub: 'View on GitHub',
     viewDocs: 'View Documentation',
     docs: 'Docs',
     switchToLight: 'Switch to Light Mode',
     switchToDark: 'Switch to Dark Mode',
     dashboard: 'Dashboard',
     login: 'Login',
-    getStarted: 'Get Started',
     goToDashboard: 'Go to Dashboard',
-    // User-focused value proposition
-    heroSubtitle: 'One Key, All AI Models',
-    heroDescription: 'No need to manage multiple subscriptions. Access Claude, GPT, Gemini and more with a single API key',
-    tags: {
-      subscriptionToApi: 'Subscription to API',
-      stickySession: 'Session Persistence',
-      realtimeBilling: 'Pay As You Go'
+    // Promo banner
+    promo: {
+      tag: '🔥 Coming Soon',
+      before: 'Flagship',
+      highlight: 'Claude Fable 5',
+      after: 'is arriving on {name} — stronger reasoning · better at code · redefining AI coding!',
+      cta: 'Sign Up Early'
     },
-    // Pain points section
-    painPoints: {
-      title: 'Sound Familiar?',
+    // Hero
+    hero: {
+      badge: 'Secure & Reliable AI Coding API Gateway',
+      titlePrefix: 'One API to ',
+      titleHighlight: 'Connect All AI Models',
+      desc: 'An AI API aggregation gateway for developers and teams. Unified access to Claude, GPT and other mainstream models, with stable API forwarding, online top-up and usage analytics.',
+      register: 'Sign Up Now',
+      loginConsole: 'Sign In to Console'
+    },
+    // Stats bar
+    stats: {
+      node: { value: 'HongKong', label: 'Low-Latency Asia Node' },
+      encryption: { value: 'HTTPS', label: 'End-to-End Encryption' },
+      uptime: { value: '99.9%', label: 'Service Uptime SLA' },
+      support: { value: '24h', label: 'Online Ticket Support' }
+    },
+    // Security & privacy
+    security: {
+      title: 'Security & Privacy',
+      subtitle: 'Your data security is our first commitment',
       items: {
-        expensive: {
-          title: 'High Subscription Costs',
-          desc: 'Paying for multiple AI subscriptions that add up every month'
+        noSell: {
+          title: 'No Data Selling',
+          desc: 'Your request data is never sold or used for any commercial purpose. We promise never to profile users for advertising.'
         },
-        complex: {
-          title: 'Account Chaos',
-          desc: 'Managing scattered accounts and API keys across different platforms'
+        minimalLog: {
+          title: 'Minimal Logging',
+          desc: 'We only keep the logs necessary for billing, rate limiting and troubleshooting, and never record the actual content of your requests.'
         },
-        unstable: {
-          title: 'Service Interruptions',
-          desc: 'Single accounts hitting rate limits and disrupting your workflow'
-        },
-        noControl: {
-          title: 'No Usage Control',
-          desc: "Can't track where your money goes or limit team member usage"
+        keyControl: {
+          title: 'Independent Key Management',
+          desc: 'API keys can be created, rotated and disabled individually for fine-grained control over each application.'
         }
       }
     },
-    // Solutions section
-    solutions: {
-      title: 'We Solve These Problems',
-      subtitle: 'Three simple steps to stress-free AI access'
-    },
-    features: {
-      unifiedGateway: 'One-Click Access',
-      unifiedGatewayDesc: 'Get a single API key to call all connected AI models. No separate applications needed.',
-      multiAccount: 'Always Reliable',
-      multiAccountDesc: 'Smart routing across multiple upstream accounts with automatic failover. Say goodbye to errors.',
-      balanceQuota: 'Pay What You Use',
-      balanceQuotaDesc: 'Usage-based billing with quota limits. Full visibility into team consumption.'
-    },
-    // Comparison section
-    comparison: {
-      title: 'Why Choose Us?',
-      headers: {
-        feature: 'Comparison',
-        official: 'Official Subscriptions',
-        us: 'Our Platform'
+    // Transparent recharge & route pricing
+    models: {
+      title: 'Transparent Top-Up, Clear Routes.',
+      subtitle: 'Unified access to Claude and Codex — pricing and routes stay fully transparent and verifiable.',
+      ratioLabel: 'Route Multiplier',
+      supportedModels: 'Supported Models',
+      recharge: 'Top Up Now',
+      banner: {
+        tag: 'Limited-Time',
+        title: 'Top Up ￥100, Get $100 Credits',
+        desc: 'Top up before you use. Right now, a top-up of ￥100 credits $100 to your balance. Claude Max and Codex(Team) are priced separately; model prices are synced at 10% off the OpenModel public list price. Route multipliers and available models follow the live figures on the in-app "Available Channels" page.'
       },
-      items: {
-        pricing: {
-          feature: 'Pricing',
-          official: 'Fixed monthly fee, pay even if unused',
-          us: 'Pay only for what you use'
+      plans: {
+        claude: {
+          badge: 'Claude',
+          name: 'Claude Max',
+          ratio: '1 : 1.6',
+          desc: 'Top-ups are credited at 6x+ right now — pay ￥100 to get $100 credits. Model prices are synced at 10% off the OpenModel public list price. Official Max20x accounts, ideal for Claude Code and long-context coding tasks.',
+          cli: 'Claude Code CLI supported'
         },
-        models: {
-          feature: 'Model Selection',
-          official: 'Single provider only',
-          us: 'Switch between models freely'
-        },
-        management: {
-          feature: 'Account Management',
-          official: 'Manage each service separately',
-          us: 'Unified key, one dashboard'
-        },
-        stability: {
-          feature: 'Stability',
-          official: 'Single account rate limits',
-          us: 'Multi-account pool, auto-failover'
-        },
-        control: {
-          feature: 'Usage Control',
-          official: 'Not available',
-          us: 'Quotas & detailed analytics'
+        codex: {
+          badge: 'Codex',
+          name: 'Codex(Team)',
+          ratio: '1 : 0.6',
+          desc: 'Top-ups are credited at 6x+ right now — pay ￥100 to get $100 credits. Model prices are synced at 10% off the OpenModel public list price. ChatGPT Team OAuth route, supporting Codex CLI, OpenAI-compatible dev tools and image generation.',
+          cli: 'Codex CLI'
         }
       }
     },
-    providers: {
-      title: 'Supported AI Models',
-      description: 'One API, Multiple Choices',
-      supported: 'Supported',
-      soon: 'Soon',
-      claude: 'Claude',
-      gemini: 'Gemini',
-      antigravity: 'Antigravity',
-      more: 'More'
+    // How it works
+    steps: {
+      title: 'Get Started in 3 Steps',
+      subtitle: 'Simple setup, instant access',
+      items: {
+        register: { title: 'Create an Account', desc: 'Register and verify your email; new users get trial credits' },
+        createKey: { title: 'Create an API Key', desc: 'Create a dedicated API key in the console; manage multiple keys independently' },
+        integrate: { title: 'Connect Your Tools', desc: 'Fill the Base URL and Key into your dev tools and start building' }
+      }
+    },
+    // FAQ
+    faq: {
+      title: 'Frequently Asked Questions',
+      subtitle: 'Quickly learn about how {name} works and its security policies',
+      items: {
+        tools: {
+          q: 'Which development tools are supported?',
+          a: 'All tools compatible with the OpenAI API format, including Claude Code, Cursor, Cline, Roo Code, ChatGPT clients and more.'
+        },
+        security: {
+          q: 'Is data transmission secure?',
+          a: 'End-to-end HTTPS encryption. Servers are deployed in Singapore, optimized for access from Asia. We do not record the actual content of your requests.'
+        },
+        payment: {
+          q: 'Which payment methods are supported?',
+          a: 'Alipay, WeChat Pay and international credit cards are supported, with top-ups credited instantly.'
+        },
+        support: {
+          q: 'How can I get help if I run into issues?',
+          a: '24-hour online ticket support with a typical response within 1 hour. You can also get quick help through the community.'
+        }
+      }
     },
     // CTA section
     cta: {
-      title: 'Ready to Get Started?',
-      description: 'Sign up now and get free trial credits to experience seamless AI access',
-      button: 'Sign Up Free'
+      title: 'Start Using {name} Today',
+      subtitle: 'Reliable access to mainstream AI models for more efficient development',
+      register: 'Create a Free Account',
+      login: 'Already have an account? Sign in'
+    },
+    // Service statement & compliance notice
+    disclaimer: {
+      title: 'Service Statement & Compliance Notice',
+      location: 'HongKong',
+      crossBorder: 'cross-border data transfer',
+      p1a: 'This platform’s servers are deployed in ',
+      p1b: ' and operated by an overseas entity. When using this service, your request data will be processed and transmitted through overseas servers, which may involve ',
+      p1c: '.',
+      items: {
+        scope: 'This service targets developers and technical teams capable of making compliance judgments, and does not directly serve ordinary consumers in mainland China',
+        compliance: 'Users should confirm on their own whether using this service complies with the laws and regulations of their region, including but not limited to data export, cybersecurity and personal information protection',
+        prohibited: 'Do not use this service to transmit state secrets, sensitive personal information or other controlled critical data',
+        liability: 'This platform bears no legal liability arising from users’ violation of local laws and regulations'
+      },
+      p2: 'By continuing to use this service, you acknowledge the above information and confirm that you voluntarily assume the corresponding risks and responsibilities. If you have compliance concerns, we recommend consulting a legal professional before deciding whether to use it.',
+      copyright: 'The final interpretation of this statement belongs to the platform operator'
     },
     footer: {
       allRightsReserved: 'All rights reserved.'
@@ -6076,7 +6108,12 @@ export default {
         homeContentHint: 'Customize the home page content. Supports Markdown/HTML. If you enter a URL (starting with http:// or https://), it will be used as an iframe src to embed an external page. When set, the default status information will no longer be displayed.',
         homeContentIframeWarning: '⚠️ iframe mode note: Some websites have X-Frame-Options or CSP security policies that prevent embedding in iframes. If the page appears blank or shows an error, please verify the target website allows embedding, or consider using HTML mode to build your own content.',
         hideCcsImportButton: 'Hide CCS Import Button',
-        hideCcsImportButtonHint: 'When enabled, the "Import to CCS" button will be hidden on the API Keys page'
+        hideCcsImportButtonHint: 'When enabled, the "Import to CCS" button will be hidden on the API Keys page',
+        homePromoEnabled: 'Home Page Promo Banner',
+        homePromoEnabledHint: 'Controls whether the promo banner at the top of the default home page is shown',
+        homePromoText: 'Promo Banner Text',
+        homePromoTextPlaceholder: 'Leave empty to use the built-in default text',
+        homePromoTextHint: 'Customize the text of the default home page promo banner. When empty, the built-in default text is used. Only applies when "Home Page Content" is not set.'
       },
       purchase: {
         title: 'Recharge / Subscription Page',
@@ -7200,7 +7237,7 @@ export default {
     amountTooLow: 'Minimum amount is {min}',
     amountTooHigh: 'Maximum amount is {max}',
     amountNoMethod: 'No payment method available for this amount',
-    rechargeRatePreview: 'Current rate: 1 CNY = {usd} USD',
+    rechargeRatePreview: 'Current activity rate: pay 1 CNY, get {usd} USD credit',
     refundReason: 'Refund Reason',
     refundReasonPlaceholder: 'Please describe your refund reason',
     stripeLoadFailed: 'Failed to load payment component. Please refresh and try again.',

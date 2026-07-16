@@ -12,25 +12,16 @@
     <div v-else v-html="homeContent"></div>
   </div>
 
-  <!-- Default Home Page -->
+  <!-- Default Home Page (commercial landing) -->
   <div
     v-else
     class="relative flex min-h-screen flex-col overflow-hidden bg-gradient-to-br from-gray-50 via-primary-50/30 to-gray-100 dark:from-dark-950 dark:via-dark-900 dark:to-dark-950"
   >
     <!-- Background Decorations -->
     <div class="pointer-events-none absolute inset-0 overflow-hidden">
-      <div
-        class="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-primary-400/20 blur-3xl"
-      ></div>
-      <div
-        class="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-primary-500/15 blur-3xl"
-      ></div>
-      <div
-        class="absolute left-1/3 top-1/4 h-72 w-72 rounded-full bg-primary-300/10 blur-3xl"
-      ></div>
-      <div
-        class="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-primary-400/10 blur-3xl"
-      ></div>
+      <div class="absolute -right-40 -top-40 h-96 w-96 rounded-full bg-primary-400/20 blur-3xl"></div>
+      <div class="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-primary-500/15 blur-3xl"></div>
+      <div class="absolute left-1/3 top-1/4 h-72 w-72 rounded-full bg-primary-300/10 blur-3xl"></div>
       <div
         class="absolute inset-0 bg-[linear-gradient(rgba(20,184,166,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,0.03)_1px,transparent_1px)] bg-[size:64px_64px]"
       ></div>
@@ -40,18 +31,17 @@
     <header class="relative z-20 px-6 py-4">
       <nav class="mx-auto flex max-w-6xl items-center justify-between">
         <!-- Logo -->
-        <div class="flex items-center">
+        <div class="flex items-center gap-2.5">
           <div class="h-10 w-10 overflow-hidden rounded-xl shadow-md">
             <img :src="siteLogo || '/logo.png'" alt="Logo" class="h-full w-full object-contain" />
           </div>
+          <span class="text-lg font-bold text-gray-900 dark:text-white">{{ siteName }}</span>
         </div>
 
         <!-- Nav Actions -->
         <div class="flex items-center gap-3">
-          <!-- Language Switcher -->
           <LocaleSwitcher />
 
-          <!-- Doc Link -->
           <a
             v-if="docUrl"
             :href="docUrl"
@@ -63,7 +53,6 @@
             <Icon name="book" size="md" />
           </a>
 
-          <!-- Theme Toggle -->
           <button
             @click="toggleTheme"
             class="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:text-dark-400 dark:hover:bg-dark-800 dark:hover:text-white"
@@ -73,7 +62,6 @@
             <Icon v-else name="moon" size="md" />
           </button>
 
-          <!-- Login / Dashboard Button -->
           <router-link
             v-if="isAuthenticated"
             :to="dashboardPath"
@@ -85,19 +73,6 @@
               {{ userInitial }}
             </span>
             <span class="text-xs font-medium text-white">{{ t('home.dashboard') }}</span>
-            <svg
-              class="h-3 w-3 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-              />
-            </svg>
           </router-link>
           <router-link
             v-else
@@ -110,263 +85,170 @@
       </nav>
     </header>
 
-    <!-- Main Content -->
-    <main class="relative z-10 flex-1 px-6 py-16">
-      <div class="mx-auto max-w-6xl">
-        <!-- Hero Section - Left/Right Layout -->
-        <div class="mb-12 flex flex-col items-center justify-between gap-12 lg:flex-row lg:gap-16">
-          <!-- Left: Text Content -->
-          <div class="flex-1 text-center lg:text-left">
-            <h1
-              class="mb-4 text-4xl font-bold text-gray-900 dark:text-white md:text-5xl lg:text-6xl"
+    <!-- Main Content (styled after cda2api-home) -->
+    <main class="relative z-10 flex-1">
+      <div class="cda-home">
+        <!-- Promo Banner -->
+        <div v-if="showPromo" class="cda-promo">
+          <div class="cda-promo-inner">
+            <span class="cda-promo-tag">{{ t('home.promo.tag') }}</span>
+            <span v-if="promoTextCustom" class="cda-promo-text">{{ promoTextCustom }}</span>
+            <span v-else class="cda-promo-text">
+              {{ t('home.promo.before') }}
+              <strong>{{ t('home.promo.highlight') }}</strong>
+              {{ t('home.promo.after', { name: siteName }) }}
+            </span>
+            <router-link :to="registerTo" class="cda-promo-cta"
+              >{{ t('home.promo.cta') }} →</router-link
             >
-              {{ siteName }}
-            </h1>
-            <p class="mb-8 text-lg text-gray-600 dark:text-dark-300 md:text-xl">
-              {{ siteSubtitle }}
-            </p>
+          </div>
+        </div>
 
-            <!-- CTA Button -->
-            <div>
-              <router-link
-                :to="isAuthenticated ? dashboardPath : '/login'"
-                class="btn btn-primary px-8 py-3 text-base shadow-lg shadow-primary-500/30"
-              >
-                {{ isAuthenticated ? t('home.goToDashboard') : t('home.getStarted') }}
-                <Icon name="arrowRight" size="md" class="ml-2" :stroke-width="2" />
+        <!-- Hero -->
+        <div class="cda-hero">
+          <div class="cda-hero-badge">🚀 {{ siteName }} · {{ t('home.hero.badge') }}</div>
+          <h1>
+            {{ t('home.hero.titlePrefix') }}<span>{{ t('home.hero.titleHighlight') }}</span>
+          </h1>
+          <p>{{ t('home.hero.desc') }}</p>
+          <div class="cda-btn-group">
+            <router-link :to="registerTo" class="cda-btn cda-btn-primary">{{
+              t('home.hero.register')
+            }}</router-link>
+            <router-link :to="loginTo" class="cda-btn cda-btn-secondary">{{
+              t('home.hero.loginConsole')
+            }}</router-link>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="cda-stats">
+          <div v-for="s in stats" :key="s" class="cda-stat-card">
+            <div class="cda-stat-value">{{ t(`home.stats.${s}.value`) }}</div>
+            <div class="cda-stat-label">{{ t(`home.stats.${s}.label`) }}</div>
+          </div>
+        </div>
+
+        <!-- Security -->
+        <div class="cda-section">
+          <h2 class="cda-section-title">{{ t('home.security.title') }}</h2>
+          <p class="cda-section-desc">{{ t('home.security.subtitle') }}</p>
+          <div class="cda-features">
+            <div v-for="item in securityItems" :key="item.key" class="cda-feature-card">
+              <div class="cda-feature-icon" :style="{ background: item.bg }">{{ item.icon }}</div>
+              <h3>{{ t(`home.security.items.${item.key}.title`) }}</h3>
+              <p>{{ t(`home.security.items.${item.key}.desc`) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transparent Recharge / Route Pricing -->
+        <div class="cda-section">
+          <div class="cda-recharge-header">
+            <h2 class="cda-recharge-title">{{ t('home.models.title') }}</h2>
+            <p class="cda-recharge-lead">{{ t('home.models.subtitle') }}</p>
+          </div>
+
+          <!-- Limited-time banner -->
+          <div class="cda-recharge-banner">
+            <div class="cda-recharge-banner-main">
+              <span class="cda-recharge-banner-tag">{{ t('home.models.banner.tag') }}</span>
+              <div class="cda-recharge-banner-title">{{ t('home.models.banner.title') }}</div>
+            </div>
+            <p class="cda-recharge-banner-desc">{{ t('home.models.banner.desc') }}</p>
+          </div>
+
+          <!-- Plan cards -->
+          <div class="cda-recharge-cards">
+            <div v-for="plan in rechargePlans" :key="plan.key" class="cda-recharge-card">
+              <div class="cda-recharge-card-head">
+                <span class="cda-recharge-badge">{{ t(`home.models.plans.${plan.key}.badge`) }}</span>
+                <span class="cda-recharge-name">{{ t(`home.models.plans.${plan.key}.name`) }}</span>
+              </div>
+              <div class="cda-recharge-ratio">
+                <span class="cda-recharge-ratio-label">{{ t('home.models.ratioLabel') }}</span>
+                <span class="cda-recharge-ratio-value">{{
+                  t(`home.models.plans.${plan.key}.ratio`)
+                }}</span>
+              </div>
+              <p class="cda-recharge-desc">{{ t(`home.models.plans.${plan.key}.desc`) }}</p>
+              <div class="cda-recharge-models-label">{{ t('home.models.supportedModels') }}</div>
+              <div class="cda-recharge-chips">
+                <span v-for="m in plan.models" :key="m" class="cda-recharge-chip">{{ m }}</span>
+                <span class="cda-recharge-chip">{{ t(`home.models.plans.${plan.key}.cli`) }}</span>
+              </div>
+              <router-link :to="registerTo" class="cda-recharge-btn">
+                ⚡ {{ t('home.models.recharge') }}
               </router-link>
             </div>
           </div>
+        </div>
 
-          <!-- Right: Terminal Animation -->
-          <div class="flex flex-1 justify-center lg:justify-end">
-            <div class="terminal-container">
-              <div class="terminal-window">
-                <!-- Window header -->
-                <div class="terminal-header">
-                  <div class="terminal-buttons">
-                    <span class="btn-close"></span>
-                    <span class="btn-minimize"></span>
-                    <span class="btn-maximize"></span>
-                  </div>
-                  <span class="terminal-title">terminal</span>
-                </div>
-                <!-- Terminal content -->
-                <div class="terminal-body">
-                  <div class="code-line line-1">
-                    <span class="code-prompt">$</span>
-                    <span class="code-cmd">curl</span>
-                    <span class="code-flag">-X POST</span>
-                    <span class="code-url">/v1/messages</span>
-                  </div>
-                  <div class="code-line line-2">
-                    <span class="code-comment"># Routing to upstream...</span>
-                  </div>
-                  <div class="code-line line-3">
-                    <span class="code-success">200 OK</span>
-                    <span class="code-response">{ "content": "Hello!" }</span>
-                  </div>
-                  <div class="code-line line-4">
-                    <span class="code-prompt">$</span>
-                    <span class="cursor"></span>
-                  </div>
-                </div>
-              </div>
+        <!-- Steps -->
+        <div class="cda-section">
+          <h2 class="cda-section-title">{{ t('home.steps.title') }}</h2>
+          <p class="cda-section-desc">{{ t('home.steps.subtitle') }}</p>
+          <div class="cda-steps">
+            <div v-for="(step, index) in steps" :key="step" class="cda-step">
+              <div class="cda-step-num">{{ index + 1 }}</div>
+              <h3>{{ t(`home.steps.items.${step}.title`) }}</h3>
+              <p>{{ t(`home.steps.items.${step}.desc`) }}</p>
             </div>
           </div>
         </div>
 
-        <!-- Feature Tags - Centered -->
-        <div class="mb-12 flex flex-wrap items-center justify-center gap-4 md:gap-6">
-          <div
-            class="inline-flex items-center gap-2.5 rounded-full border border-gray-200/50 bg-white/80 px-5 py-2.5 shadow-sm backdrop-blur-sm dark:border-dark-700/50 dark:bg-dark-800/80"
-          >
-            <Icon name="swap" size="sm" class="text-primary-500" />
-            <span class="text-sm font-medium text-gray-700 dark:text-dark-200">{{
-              t('home.tags.subscriptionToApi')
-            }}</span>
-          </div>
-          <div
-            class="inline-flex items-center gap-2.5 rounded-full border border-gray-200/50 bg-white/80 px-5 py-2.5 shadow-sm backdrop-blur-sm dark:border-dark-700/50 dark:bg-dark-800/80"
-          >
-            <Icon name="shield" size="sm" class="text-primary-500" />
-            <span class="text-sm font-medium text-gray-700 dark:text-dark-200">{{
-              t('home.tags.stickySession')
-            }}</span>
-          </div>
-          <div
-            class="inline-flex items-center gap-2.5 rounded-full border border-gray-200/50 bg-white/80 px-5 py-2.5 shadow-sm backdrop-blur-sm dark:border-dark-700/50 dark:bg-dark-800/80"
-          >
-            <Icon name="chart" size="sm" class="text-primary-500" />
-            <span class="text-sm font-medium text-gray-700 dark:text-dark-200">{{
-              t('home.tags.realtimeBilling')
-            }}</span>
+        <!-- FAQ -->
+        <div class="cda-section">
+          <h2 class="cda-section-title">{{ t('home.faq.title') }}</h2>
+          <p class="cda-section-desc">{{ t('home.faq.subtitle') }}</p>
+          <div class="cda-faq-list">
+            <div v-for="item in faqItems" :key="item" class="cda-faq-item">
+              <h4>{{ t(`home.faq.items.${item}.q`) }}</h4>
+              <p>{{ t(`home.faq.items.${item}.a`) }}</p>
+            </div>
           </div>
         </div>
 
-        <!-- Features Grid -->
-        <div class="mb-12 grid gap-6 md:grid-cols-3">
-          <!-- Feature 1: Unified Gateway -->
-          <div
-            class="group rounded-2xl border border-gray-200/50 bg-white/60 p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 dark:border-dark-700/50 dark:bg-dark-800/60"
-          >
-            <div
-              class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30 transition-transform group-hover:scale-110"
-            >
-              <Icon name="server" size="lg" class="text-white" />
-            </div>
-            <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-              {{ t('home.features.unifiedGateway') }}
-            </h3>
-            <p class="text-sm leading-relaxed text-gray-600 dark:text-dark-400">
-              {{ t('home.features.unifiedGatewayDesc') }}
-            </p>
-          </div>
-
-          <!-- Feature 2: Account Pool -->
-          <div
-            class="group rounded-2xl border border-gray-200/50 bg-white/60 p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 dark:border-dark-700/50 dark:bg-dark-800/60"
-          >
-            <div
-              class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 shadow-lg shadow-primary-500/30 transition-transform group-hover:scale-110"
-            >
-              <svg
-                class="h-6 w-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
-                />
-              </svg>
-            </div>
-            <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-              {{ t('home.features.multiAccount') }}
-            </h3>
-            <p class="text-sm leading-relaxed text-gray-600 dark:text-dark-400">
-              {{ t('home.features.multiAccountDesc') }}
-            </p>
-          </div>
-
-          <!-- Feature 3: Billing & Quota -->
-          <div
-            class="group rounded-2xl border border-gray-200/50 bg-white/60 p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary-500/10 dark:border-dark-700/50 dark:bg-dark-800/60"
-          >
-            <div
-              class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/30 transition-transform group-hover:scale-110"
-            >
-              <svg
-                class="h-6 w-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"
-                />
-              </svg>
-            </div>
-            <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
-              {{ t('home.features.balanceQuota') }}
-            </h3>
-            <p class="text-sm leading-relaxed text-gray-600 dark:text-dark-400">
-              {{ t('home.features.balanceQuotaDesc') }}
-            </p>
+        <!-- CTA -->
+        <div class="cda-cta">
+          <h2>{{ t('home.cta.title', { name: siteName }) }}</h2>
+          <p>{{ t('home.cta.subtitle') }}</p>
+          <div class="cda-btn-group">
+            <router-link :to="registerTo" class="cda-btn cda-btn-primary">{{
+              t('home.cta.register')
+            }}</router-link>
+            <router-link :to="loginTo" class="cda-btn cda-btn-secondary">{{
+              t('home.cta.login')
+            }}</router-link>
           </div>
         </div>
 
-        <!-- Supported Providers -->
-        <div class="mb-8 text-center">
-          <h2 class="mb-3 text-2xl font-bold text-gray-900 dark:text-white">
-            {{ t('home.providers.title') }}
-          </h2>
-          <p class="text-sm text-gray-600 dark:text-dark-400">
-            {{ t('home.providers.description') }}
-          </p>
-        </div>
-
-        <div class="mb-16 flex flex-wrap items-center justify-center gap-4">
-          <!-- Claude - Supported -->
-          <div
-            class="flex items-center gap-2 rounded-xl border border-primary-200 bg-white/60 px-5 py-3 ring-1 ring-primary-500/20 backdrop-blur-sm dark:border-primary-800 dark:bg-dark-800/60"
-          >
-            <div
-              class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-500"
-            >
-              <span class="text-xs font-bold text-white">C</span>
+        <!-- Disclaimer -->
+        <div class="cda-disclaimer">
+          <div class="cda-disclaimer-inner">
+            <div class="cda-disclaimer-header">
+              <div class="cda-disclaimer-icon">⚖️</div>
+              <div class="cda-disclaimer-title">{{ t('home.disclaimer.title') }}</div>
             </div>
-            <span class="text-sm font-medium text-gray-700 dark:text-dark-200">{{ t('home.providers.claude') }}</span>
-            <span
-              class="rounded bg-primary-100 px-1.5 py-0.5 text-[10px] font-medium text-primary-600 dark:bg-primary-900/30 dark:text-primary-400"
-              >{{ t('home.providers.supported') }}</span
-            >
-          </div>
-          <!-- GPT - Supported -->
-          <div
-            class="flex items-center gap-2 rounded-xl border border-primary-200 bg-white/60 px-5 py-3 ring-1 ring-primary-500/20 backdrop-blur-sm dark:border-primary-800 dark:bg-dark-800/60"
-          >
-            <div
-              class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-green-600"
-            >
-              <span class="text-xs font-bold text-white">G</span>
+            <div class="cda-disclaimer-body">
+              <p>
+                {{ t('home.disclaimer.p1a')
+                }}<span class="cda-disclaimer-highlight">{{ t('home.disclaimer.location') }}</span
+                >{{ t('home.disclaimer.p1b')
+                }}<span class="cda-disclaimer-highlight">{{ t('home.disclaimer.crossBorder') }}</span
+                >{{ t('home.disclaimer.p1c') }}
+              </p>
+              <ul>
+                <li v-for="item in disclaimerItems" :key="item">
+                  {{ t(`home.disclaimer.items.${item}`) }}
+                </li>
+              </ul>
+              <div class="cda-disclaimer-divider"></div>
+              <p>{{ t('home.disclaimer.p2') }}</p>
             </div>
-            <span class="text-sm font-medium text-gray-700 dark:text-dark-200">GPT</span>
-            <span
-              class="rounded bg-primary-100 px-1.5 py-0.5 text-[10px] font-medium text-primary-600 dark:bg-primary-900/30 dark:text-primary-400"
-              >{{ t('home.providers.supported') }}</span
-            >
-          </div>
-          <!-- Gemini - Supported -->
-          <div
-            class="flex items-center gap-2 rounded-xl border border-primary-200 bg-white/60 px-5 py-3 ring-1 ring-primary-500/20 backdrop-blur-sm dark:border-primary-800 dark:bg-dark-800/60"
-          >
-            <div
-              class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600"
-            >
-              <span class="text-xs font-bold text-white">G</span>
+            <div class="cda-disclaimer-footer">
+              © {{ siteName }} · {{ t('home.disclaimer.copyright') }}
             </div>
-            <span class="text-sm font-medium text-gray-700 dark:text-dark-200">{{ t('home.providers.gemini') }}</span>
-            <span
-              class="rounded bg-primary-100 px-1.5 py-0.5 text-[10px] font-medium text-primary-600 dark:bg-primary-900/30 dark:text-primary-400"
-              >{{ t('home.providers.supported') }}</span
-            >
-          </div>
-          <!-- Antigravity - Supported -->
-          <div
-            class="flex items-center gap-2 rounded-xl border border-primary-200 bg-white/60 px-5 py-3 ring-1 ring-primary-500/20 backdrop-blur-sm dark:border-primary-800 dark:bg-dark-800/60"
-          >
-            <div
-              class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 to-pink-600"
-            >
-              <span class="text-xs font-bold text-white">A</span>
-            </div>
-            <span class="text-sm font-medium text-gray-700 dark:text-dark-200">{{ t('home.providers.antigravity') }}</span>
-            <span
-              class="rounded bg-primary-100 px-1.5 py-0.5 text-[10px] font-medium text-primary-600 dark:bg-primary-900/30 dark:text-primary-400"
-              >{{ t('home.providers.supported') }}</span
-            >
-          </div>
-          <!-- More - Coming Soon -->
-          <div
-            class="flex items-center gap-2 rounded-xl border border-gray-200/50 bg-white/40 px-5 py-3 opacity-60 backdrop-blur-sm dark:border-dark-700/50 dark:bg-dark-800/40"
-          >
-            <div
-              class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-gray-500 to-gray-600"
-            >
-              <span class="text-xs font-bold text-white">+</span>
-            </div>
-            <span class="text-sm font-medium text-gray-700 dark:text-dark-200">{{ t('home.providers.more') }}</span>
-            <span
-              class="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-dark-700 dark:text-dark-400"
-              >{{ t('home.providers.soon') }}</span
-            >
           </div>
         </div>
       </div>
@@ -390,14 +272,6 @@
           >
             {{ t('home.docs') }}
           </a>
-          <a
-            :href="githubUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-dark-400 dark:hover:text-white"
-          >
-            GitHub
-          </a>
         </div>
       </div>
     </footer>
@@ -419,9 +293,12 @@ const appStore = useAppStore()
 // Site settings - directly from appStore (already initialized from injected config)
 const siteName = computed(() => appStore.cachedPublicSettings?.site_name || appStore.siteName || 'Sub2API')
 const siteLogo = computed(() => appStore.cachedPublicSettings?.site_logo || appStore.siteLogo || '')
-const siteSubtitle = computed(() => appStore.cachedPublicSettings?.site_subtitle || 'AI API Gateway Platform')
 const docUrl = computed(() => appStore.cachedPublicSettings?.doc_url || appStore.docUrl || '')
 const homeContent = computed(() => appStore.cachedPublicSettings?.home_content || '')
+
+// Promo banner (admin-configurable via public settings; defaults to shown)
+const showPromo = computed(() => appStore.cachedPublicSettings?.home_promo_enabled !== false)
+const promoTextCustom = computed(() => (appStore.cachedPublicSettings?.home_promo_text || '').trim())
 
 // Check if homeContent is a URL (for iframe display)
 const isHomeContentUrl = computed(() => {
@@ -429,16 +306,52 @@ const isHomeContentUrl = computed(() => {
   return content.startsWith('http://') || content.startsWith('https://')
 })
 
+// Stat cards (labels/values resolved via i18n in template)
+const stats = ['node', 'encryption', 'uptime', 'support'] as const
+
+// Security & privacy cards
+const securityItems = [
+  { key: 'noSell', icon: '🔒', bg: 'rgba(20,184,166,0.1)' },
+  { key: 'minimalLog', icon: '📋', bg: 'rgba(59,130,246,0.1)' },
+  { key: 'keyControl', icon: '🔑', bg: 'rgba(168,85,247,0.1)' },
+] as const
+
+// Recharge plans (model IDs are proper nouns; not translated)
+interface RechargePlan {
+  key: string
+  models: string[]
+}
+const rechargePlans: RechargePlan[] = [
+  {
+    key: 'claude',
+    models: [
+      'claude-opus-4-7',
+      'claude-opus-4-6',
+      'claude-sonnet-4-6',
+      'claude-sonnet-4-5',
+      'claude-haiku-4-5',
+    ],
+  },
+  {
+    key: 'codex',
+    models: ['gpt-5.5', 'gpt-image-2', 'gpt-5.4', 'gpt-5.3-codex'],
+  },
+]
+
+// Steps / FAQ / disclaimer list keys
+const steps = ['register', 'createKey', 'integrate'] as const
+const faqItems = ['tools', 'security', 'payment', 'support'] as const
+const disclaimerItems = ['scope', 'compliance', 'prohibited', 'liability'] as const
+
 // Theme
 const isDark = ref(document.documentElement.classList.contains('dark'))
-
-// GitHub URL
-const githubUrl = 'https://github.com/Wei-Shaw/sub2api'
 
 // Auth state
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const isAdmin = computed(() => authStore.isAdmin)
-const dashboardPath = computed(() => isAdmin.value ? '/admin/dashboard' : '/dashboard')
+const dashboardPath = computed(() => (isAdmin.value ? '/admin/dashboard' : '/dashboard'))
+const registerTo = computed(() => (isAuthenticated.value ? dashboardPath.value : '/register'))
+const loginTo = computed(() => (isAuthenticated.value ? dashboardPath.value : '/login'))
 const userInitial = computed(() => {
   const user = authStore.user
   if (!user || !user.email) return ''
@@ -481,164 +394,713 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Terminal Container */
-.terminal-container {
+/* Layout styles ported from cda2api-home reference; background stays transparent
+   so the page-level gradient & decorations remain visible. */
+.cda-home {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1a1a2e;
+  line-height: 1.6;
+}
+.cda-home * {
+  box-sizing: border-box;
+}
+.cda-home a {
+  color: #0d9488;
+  text-decoration: none;
+}
+.cda-home a:hover {
+  text-decoration: underline;
+}
+.cda-home a.cda-btn-primary,
+.cda-home a.cda-btn-primary:hover {
+  color: #fff !important;
+}
+
+/* Hero */
+.cda-hero {
+  text-align: center;
+  padding: 60px 24px 60px;
   position: relative;
-  display: inline-block;
-}
-
-/* Terminal Window */
-.terminal-window {
-  width: 420px;
-  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-  border-radius: 14px;
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   overflow: hidden;
-  transform: perspective(1000px) rotateX(2deg) rotateY(-2deg);
-  transition: transform 0.3s ease;
+}
+.cda-hero-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #0d9488, #0891b2);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 14px rgba(20, 184, 166, 0.3);
+  letter-spacing: 0.3px;
+}
+.cda-hero h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+.cda-hero h1 span {
+  background: linear-gradient(135deg, #0d9488, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cda-hero p {
+  font-size: 16px;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+.cda-btn-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.cda-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+.cda-btn-primary {
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(20, 184, 166, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+}
+.cda-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(20, 184, 166, 0.4);
+  color: #fff;
+  text-decoration: none;
+}
+.cda-btn-secondary {
+  background: #fff;
+  color: #0d9488;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.cda-btn-secondary:hover {
+  border-color: #0d9488;
+  text-decoration: none;
 }
 
-.terminal-window:hover {
-  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(-4px);
+/* Stats */
+.cda-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+.cda-stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f1f5f9;
+}
+.cda-stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0d9488;
+  margin-bottom: 4px;
+}
+.cda-stat-label {
+  font-size: 12px;
+  color: #94a3b8;
 }
 
-/* Terminal Header */
-.terminal-header {
+/* Section */
+.cda-section {
+  padding: 60px 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.cda-section-title {
+  text-align: center;
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+.cda-section-desc {
+  text-align: center;
+  font-size: 15px;
+  color: #64748b;
+  margin-bottom: 40px;
+}
+
+/* Features */
+.cda-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+.cda-feature-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f1f5f9;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.cda-feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+.cda-feature-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  background: rgba(30, 41, 59, 0.8);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  justify-content: center;
+  font-size: 20px;
+  margin: 0 auto 16px;
+}
+.cda-feature-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+.cda-feature-card p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
 }
 
-.terminal-buttons {
+/* Recharge / Route Pricing */
+.cda-recharge-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 40px;
+}
+.cda-recharge-title {
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+.cda-recharge-lead {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.7;
+}
+.cda-recharge-banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.08), rgba(6, 182, 212, 0.06));
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+}
+.cda-recharge-banner-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0d9488;
+  background: rgba(20, 184, 166, 0.12);
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+.cda-recharge-banner-title {
+  font-size: clamp(18px, 3vw, 24px);
+  font-weight: 700;
+  color: #0f172a;
+}
+.cda-recharge-banner-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+}
+.cda-recharge-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.cda-recharge-card {
   display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.cda-recharge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+.cda-recharge-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.cda-recharge-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0d9488;
+  background: rgba(20, 184, 166, 0.1);
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  padding: 2px 10px;
+  border-radius: 8px;
+}
+.cda-recharge-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.cda-recharge-ratio {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.cda-recharge-ratio-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0d9488;
+}
+.cda-recharge-ratio-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0d9488;
+  letter-spacing: 1px;
+}
+.cda-recharge-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.cda-recharge-models-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 10px;
+}
+.cda-recharge-chips {
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+  margin-bottom: 20px;
+}
+.cda-recharge-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4f46e5;
+  background: #fff;
+  border: 1px solid #e9edf5;
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+.cda-recharge-chip::before {
+  content: '\2022';
+  color: #8b5cf6;
+  margin-right: 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+.cda-recharge-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  color: #fff !important;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(20, 184, 166, 0.3);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.cda-recharge-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(20, 184, 166, 0.4);
+  color: #fff !important;
+  text-decoration: none;
+}
+@media (max-width: 640px) {
+  .cda-recharge-banner {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
-.terminal-buttons span {
-  width: 12px;
-  height: 12px;
+/* Steps */
+.cda-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+.cda-step {
+  text-align: center;
+  padding: 24px 16px;
+}
+.cda-step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.cda-step h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+.cda-step p {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* FAQ */
+.cda-faq-list {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.cda-faq-item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1px solid #f1f5f9;
+}
+.cda-faq-item h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+.cda-faq-item p {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* CTA */
+.cda-cta {
+  text-align: center;
+  padding: 60px 24px 80px;
+}
+.cda-cta h2 {
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+}
+.cda-cta p {
+  font-size: 15px;
+  color: #64748b;
+  margin-bottom: 28px;
+}
+
+/* Disclaimer */
+.cda-disclaimer {
+  position: relative;
+  margin: 0 auto;
+  max-width: 860px;
+  padding: 0 24px 60px;
+}
+.cda-disclaimer-inner {
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 16px;
+  padding: 32px 28px;
+  border: 1px solid rgba(20, 184, 166, 0.15);
+  overflow: hidden;
+}
+.cda-disclaimer-inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0d9488, #06b6d4, #8b5cf6);
+}
+.cda-disclaimer-inner::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.08) 0%, transparent 70%);
   border-radius: 50%;
 }
-
-.btn-close {
-  background: #ef4444;
-}
-.btn-minimize {
-  background: #eab308;
-}
-.btn-maximize {
-  background: #22c55e;
-}
-
-.terminal-title {
-  flex: 1;
-  text-align: center;
-  font-size: 12px;
-  font-family: ui-monospace, monospace;
-  color: #64748b;
-  margin-right: 52px;
-}
-
-/* Terminal Body */
-.terminal-body {
-  padding: 20px 24px;
-  font-family: ui-monospace, 'Fira Code', monospace;
-  font-size: 14px;
-  line-height: 2;
-}
-
-.code-line {
+.cda-disclaimer-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.cda-disclaimer-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(20, 184, 166, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.cda-disclaimer-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 0.3px;
+}
+.cda-disclaimer-body {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.8;
+}
+.cda-disclaimer-body p {
+  margin-bottom: 10px;
+}
+.cda-disclaimer-body ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+.cda-disclaimer-body ul li {
+  padding: 4px 0;
+  padding-left: 20px;
+  position: relative;
+}
+.cda-disclaimer-body ul li::before {
+  content: '›';
+  position: absolute;
+  left: 4px;
+  color: #0d9488;
+  font-weight: 700;
+  font-size: 14px;
+}
+.cda-disclaimer-highlight {
+  color: #67e8f9;
+  font-weight: 500;
+}
+.cda-disclaimer-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.2), transparent);
+  margin: 16px 0;
+}
+.cda-disclaimer-footer {
+  font-size: 12px;
+  color: #64748b;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* Promo Banner */
+.cda-promo {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(120deg, #7c3aed 0%, #0d9488 50%, #0891b2 100%);
+  background-size: 200% 100%;
+  animation: cda-promo-gradient 6s ease infinite;
+  padding: 14px 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.25);
+}
+.cda-promo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  animation: cda-promo-shine 4s ease-in-out infinite;
+}
+@keyframes cda-promo-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes cda-promo-shine {
+  0% {
+    left: -60%;
+  }
+  60%,
+  100% {
+    left: 120%;
+  }
+}
+.cda-promo-inner {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   flex-wrap: wrap;
-  opacity: 0;
-  animation: line-appear 0.5s ease forwards;
+  justify-content: center;
 }
-
-.line-1 {
-  animation-delay: 0.3s;
+.cda-promo-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  animation: cda-promo-pulse 1.8s ease-in-out infinite;
 }
-.line-2 {
-  animation-delay: 1s;
-}
-.line-3 {
-  animation-delay: 1.8s;
-}
-.line-4 {
-  animation-delay: 2.5s;
-}
-
-@keyframes line-appear {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
+@keyframes cda-promo-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  50% {
+    box-shadow: 0 0 0 7px rgba(255, 255, 255, 0);
+  }
+}
+.cda-promo-text {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.cda-promo-text strong {
+  color: #fde047;
+  font-weight: 800;
+}
+.cda-promo-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  color: #7c3aed !important;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 20px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.cda-promo-cta:hover {
+  transform: translateY(-1px);
+  color: #7c3aed !important;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+@media (max-width: 600px) {
+  .cda-promo-text {
+    font-size: 13px;
   }
 }
 
-.code-prompt {
-  color: #22c55e;
-  font-weight: bold;
+/* Dark mode */
+.dark .cda-home {
+  color: #e2e8f0;
 }
-.code-cmd {
-  color: #38bdf8;
+.dark .cda-hero h1 {
+  color: #f8fafc;
 }
-.code-flag {
-  color: #a78bfa;
+.dark .cda-hero p,
+.dark .cda-section-desc {
+  color: #94a3b8;
 }
-.code-url {
+.dark .cda-stat-card,
+.dark .cda-feature-card,
+.dark .cda-recharge-card,
+.dark .cda-faq-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+.dark .cda-feature-card h3,
+.dark .cda-faq-item h4,
+.dark .cda-section-title,
+.dark .cda-step h3,
+.dark .cda-cta h2,
+.dark .cda-recharge-title,
+.dark .cda-recharge-name,
+.dark .cda-recharge-banner-title {
+  color: #f1f5f9;
+}
+.dark .cda-recharge-lead,
+.dark .cda-recharge-desc,
+.dark .cda-recharge-banner-desc {
+  color: #94a3b8;
+}
+.dark .cda-recharge-models-label {
+  color: #cbd5e1;
+}
+.dark .cda-recharge-chip {
+  background: #0f172a;
+  border-color: #334155;
+  color: #a5b4fc;
+}
+.dark .cda-feature-card p,
+.dark .cda-faq-item p,
+.dark .cda-step p {
+  color: #94a3b8;
+}
+.dark .cda-btn-secondary {
+  background: #1e293b;
+  border-color: #334155;
   color: #14b8a6;
 }
-.code-comment {
-  color: #64748b;
-  font-style: italic;
-}
-.code-success {
-  color: #22c55e;
-  background: rgba(34, 197, 94, 0.15);
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-weight: 600;
-}
-.code-response {
-  color: #fbbf24;
-}
-
-/* Blinking Cursor */
-.cursor {
-  display: inline-block;
-  width: 8px;
-  height: 16px;
-  background: #22c55e;
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
-  }
-}
-
-/* Dark mode adjustments */
-:deep(.dark) .terminal-window {
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(20, 184, 166, 0.2),
-    0 0 40px rgba(20, 184, 166, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+.dark .cda-disclaimer-inner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-color: rgba(20, 184, 166, 0.2);
 }
 </style>
